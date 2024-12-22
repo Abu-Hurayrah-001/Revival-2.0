@@ -8,7 +8,7 @@ type ConnectionObject = {
 
 const connection: ConnectionObject = {};
 
-async function dbConnect(): Promise<void> {
+const dbConnect = async() => {
     if (connection.isConnected) {
         console.log("You are already connected to the database, dear.");
         return;
@@ -17,7 +17,8 @@ async function dbConnect(): Promise<void> {
     try {
         const db = await mongoose.connect(process.env.MONGO_URI || "");
         connection.isConnected = db.connections[0].readyState;
-        console.log("Database connected. Launching Skynet in 3,2,1...")
+        console.log("Database connected. Launching Skynet in 3,2,1...");
+        return;
     } catch (error) {
         console.log("Database connection failed. Gonnar cry?", error);
         process.exit(1);

@@ -1,9 +1,17 @@
+// IMPORTS+
+"use client";
+import { signUp } from "../actions/auth/signUp";
+
+// SIGN UP
 const SignUp = () => {
     return (
         <div className="w-full h-[100vh] grid place-content-center">
-			<h1 className="cursor-pointer">
+			<button
+                className="cursor-pointer"
+                onClick={ () => signUp() }    
+            >
                 Sign Up
-            </h1>
+            </button>
 		</div>
     );
 };
