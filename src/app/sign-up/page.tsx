@@ -5,7 +5,7 @@ import { signUp } from "../actions/auth/signUp";
 // SIGN UP
 const SignUp = () => {
     return (
-        <div className="w-full h-[100vh] grid place-content-center">
+        <div className="w-full h-[100vh] grid place-content-center antialiased">
 			<button
                 className="cursor-pointer"
                 onClick={ () => signUp() }    
