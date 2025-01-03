@@ -1,9 +1,9 @@
-const ProtectedPage = () => {
+const LoginProtected = () => {
     return (
         <div className="w-full h-[100vh] grid place-content-center antialiased">
-            Login protected page
+            User protected page
         </div>
     );
 };
 
-export default ProtectedPage;
+export default LoginProtected;
