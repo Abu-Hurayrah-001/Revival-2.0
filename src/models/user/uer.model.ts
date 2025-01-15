@@ -5,7 +5,8 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface IUser extends Document {
     email: string;
     password: string;
-    courseIds?: [string];
+    forgotPasswordToken?: string;
+    forgotPasswordTokenExpiry?: Date;
 };
 
 // SCHEMAS
@@ -19,8 +20,12 @@ const userSchema = new Schema<IUser>({
         type: String,
         required: [true, "Please provide a password."],
     },
-    courseIds: {
-        type: [String],
+    forgotPasswordToken: {
+        type: String,
+        required: false,
+    },
+    forgotPasswordTokenExpiry: {
+        type: Date,
         required: false,
     },
 }, {timestamps: true});
