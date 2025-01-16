@@ -3,30 +3,19 @@ import mongoose, { Schema, Document } from "mongoose";
 
 // INTERFACES
 export interface IUser extends Document {
-    email: string;
-    password: string;
-    forgotPasswordToken?: string;
-    forgotPasswordTokenExpiry?: Date;
-};
+    phoneNumber: number;
+    OTP: number;
+}
 
 // SCHEMAS
 const userSchema = new Schema<IUser>({
-    email: {
-        type: String,
-        required: [true, "Please provide an email."],
-        unique: true,
+    phoneNumber: {
+        type: Number,
+        required: [true, "Please enter your phone number."],
     },
-    password: {
-        type: String,
-        required: [true, "Please provide a password."],
-    },
-    forgotPasswordToken: {
-        type: String,
-        required: false,
-    },
-    forgotPasswordTokenExpiry: {
-        type: Date,
-        required: false,
+    OTP: {
+        type: Number,
+        required: [true, "Please enter the OTP."]
     },
 }, {timestamps: true});
 

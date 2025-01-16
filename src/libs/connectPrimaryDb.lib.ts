@@ -9,7 +9,6 @@ type ConnectionObject = {
 const connection: ConnectionObject = {};
 
 export async function connectPrimaryDb(): Promise<void> {
-    console.log('connection.isConnected before check:', connection.isConnected);
     if (connection.isConnected) {
         console.log("You are already connected to the database, dear.");
     } else {
