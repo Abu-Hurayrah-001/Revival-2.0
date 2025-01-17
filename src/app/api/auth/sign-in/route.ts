@@ -1,6 +1,6 @@
 // IMPORTS
 import { NextRequest, NextResponse } from "next/server";
-import { signInSchema } from "@/app/schemas/auth/signUp/signIn.schema";
+import { signInSchema } from "@/schemas/auth/signUp/signIn.schema";
 import { connectPrimaryDb } from "@/libs/connectPrimaryDb.lib";
 import User, { IUser } from "@/models/user/uer.model";
 
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
         };
 
         const { phoneNumber, OTP } = reqBody;
-        const user: IUser | null = await User.findOne({ phoneNumber });
+        const user = await User.findOne({ phoneNumber }) as IUser;
 
         if (!user) {
             return NextResponse.json({ error: "User doesn't exist. Gonna cry?" }, { status: 409 })
