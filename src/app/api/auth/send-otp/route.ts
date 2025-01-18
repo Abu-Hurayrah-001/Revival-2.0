@@ -29,9 +29,12 @@ export async function POST(request: NextRequest) {
         };
 
         const OTP = generateOTP();
+        const OTPexpiry = new Date();
+        OTPexpiry.setSeconds(OTPexpiry.getSeconds() + 30);
         user.OTP = OTP;
+        user.OTPexpiry = OTPexpiry;
         await user.save();
     } catch (error) {
         return NextResponse.json({ error: error }, { status: 500 });
-    }
+    };
 }
