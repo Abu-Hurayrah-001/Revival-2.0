@@ -4,6 +4,7 @@ import { connectPrimaryDb } from "@/libs/connectPrimaryDb.lib";
 import User, { IUser } from "@/models/user/uer.model";
 import { generateOTP } from "@/libs/generateOTP";
 import { sendOTPSchema } from "@/schemas/auth/sendOTP/sendOTPschema";
+import { sendOTP } from "@/libs/sendOTP";
 
 // SEND OTP TO PHONE NUMBER
 type sendOTPprerequisite = {
@@ -30,10 +31,14 @@ export async function POST(request: NextRequest) {
 
         const OTP = generateOTP();
         const OTPexpiry = new Date();
-        OTPexpiry.setSeconds(OTPexpiry.getSeconds() + 30);
+        OTPexpiry.setSeconds(OTPexpiry.getSeconds() + 45);
+
         user.OTP = OTP;
         user.OTPexpiry = OTPexpiry;
         await user.save();
+
+        await sendOTP(phoneNumber, OTP);
+        return NextResponse.json({ message: "OTP sent to phone number" }, { status: 201 });
     } catch (error) {
         return NextResponse.json({ error: error }, { status: 500 });
     };
