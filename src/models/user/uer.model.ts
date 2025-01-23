@@ -3,16 +3,16 @@ import mongoose, { Schema, Document } from "mongoose";
 
 // INTERFACES
 export interface IUser extends Document {
-    phoneNumber: number;
+    email: string;
     OTP?: number;
     OTPexpiry?: Date;
 }
 
 // SCHEMAS
 const userSchema = new Schema<IUser>({
-    phoneNumber: {
-        type: Number,
-        required: [true, "Please enter your phone number."],
+    email: {
+        type: String,
+        required: [true, "Please enter your email."],
     },
     OTP: {
         type: Number,
