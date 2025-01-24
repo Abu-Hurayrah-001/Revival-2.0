@@ -1,19 +1,8 @@
-import {
-    Html,
-    Head,
-    Font,
-    Preview,
-    Heading,
-    Row,
-    Section,
-    Text,
-  } from '@react-email/components';
-  
-interface LoginOTPEmailProps {
-    otp: string;
-};
-  
-export default function LoginOTPEmail({ otp }: LoginOTPEmailProps) {
+// IMPORTS
+import { Html, Head, Font, Preview, Heading, Row, Section, Text } from '@react-email/components';
+
+// LOGIN OTP EMAIL
+const LoginOTPEmail = (OTP: number) => {
     return (
         <Html lang="en" dir="ltr">
             <Head>
@@ -29,26 +18,23 @@ export default function LoginOTPEmail({ otp }: LoginOTPEmailProps) {
                     fontStyle="normal"
                 />
             </Head>
-            <Preview>Here&apos;s your verification code: {otp}</Preview>
+            <Preview>Here&apos;s your verification code: {OTP.toString()}</Preview>
             <Section>
                 <Row>
                     <Heading as="h2">Hello user,</Heading>
                 </Row>
                 <Row>
-                    <Text>
-                    Thank you for registering. Please use the following verification
-                    code to complete your registration:
-                    </Text>
+                    <Text>Please use the following verification code to sign in:</Text>
                 </Row>
                 <Row>
-                    <Text>{otp}</Text> 
+                    <Text>{OTP}</Text> 
                 </Row>
                 <Row>
-                    <Text>
-                    If you did not request this code, please ignore this email.
-                    </Text>
+                    <Text>If you did not request this code, please ignore this email.</Text>
                 </Row>
             </Section>
         </Html>
     );
-  }
+  };
+
+  export default LoginOTPEmail;
