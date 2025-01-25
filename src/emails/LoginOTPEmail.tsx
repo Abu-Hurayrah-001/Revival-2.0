@@ -35,6 +35,6 @@ const LoginOTPEmail = (OTP: number) => {
             </Section>
         </Html>
     );
-  };
+};
 
-  export default LoginOTPEmail;
+export default LoginOTPEmail;

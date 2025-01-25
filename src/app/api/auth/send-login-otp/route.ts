@@ -4,19 +4,17 @@ import { connectPrimaryDb } from "@/libs/connectPrimaryDb.lib";
 import User, { IUser } from "@/models/user/uer.model";
 import { generateOTP } from "@/libs/generateOTP";
 import { z } from "zod";
-import { sendLoginOTP } from "@/libs/sendLoginOTP";
+import LoginOTPEmail from "@/emails/LoginOTPEmail";
+import { Resend } from "resend";
 
 // SEND OTP TO PHONE NUMBER
-type sendLoginOTPprerequisite = {
-    email: string;
-};
-
-const sendLoginOTPSchema = z.object({ email: z.string().email() });
 connectPrimaryDb();
+const sendLoginOTPSchema = z.object({ email: z.string().email() });
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
     try {
-        const reqBody: sendLoginOTPprerequisite = await request.json();
+        const reqBody: { email: string } = await request.json();
         const parsedData = sendLoginOTPSchema.safeParse(reqBody);
 
         if (!parsedData.success) {
@@ -36,20 +34,27 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         const OTP = generateOTP();
         const OTPexpiry = new Date();
         OTPexpiry.setSeconds(OTPexpiry.getSeconds() + 45);
-
         user.OTP = OTP;
         user.OTPexpiry = OTPexpiry;
         await user.save();
         
-        const emailResponse = await sendLoginOTP(email, OTP);
+        const { error } = await resend.emails.send({
+            from: "onboarding@resend.dev",
+            to: email,
+            subject: "Login OTP",
+            react: LoginOTPEmail(OTP),
+        });
 
-        if (emailResponse.status === 200) {
-            
+        if (error) {
+            return NextResponse.json({
+                success: false,
+                error: error.message,
+            }, { status: 500 });
         };
 
         return NextResponse.json({
             success: true,
-            message: "OTP sent to your email, dear."
+            message: "OTP sent to your email, dear.",
         }, { status: 201 });
     } catch (error) {
         return NextResponse.json({
@@ -57,4 +62,4 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             error: error
         }, { status: 500 });
     };
-}
+};
