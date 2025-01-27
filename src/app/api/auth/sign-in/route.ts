@@ -25,6 +25,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     try {
         const reqBody: signInData = await request.json();
         const parsedData = signInSchema.safeParse(reqBody);
+        const currentTime = new Date();
 
         if (!parsedData.success) {
             return NextResponse.json({
@@ -43,14 +44,34 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             }, { status: 409 });
         };
 
+        if (OTP != user.OTP) {
+            return NextResponse.json({
+                success: false,
+                error: "OTP is incorrect. Focus, champ.",
+            }, { status: 401 });
+        };
+
+        if (user.OTPexpiry) {
+            const remainingTime = (user.OTPexpiry.valueOf() - currentTime.valueOf()) / 1000;
+            
+            if (remainingTime <= 0) {
+                return NextResponse.json({
+                    success: false,
+                    error: "Too slow dude, request a new OTP please."
+                });
+            } else {
+                // TODO: Decrease OTP expiry time by 45 seconds
+            };
+        };
+
         return NextResponse.json({
             success: true,
-            message: "Logged in successfully, dear."
+            message: "Logged in successfully, dear.",
         }, { status: 200 });
     } catch (error) {
         return NextResponse.json({
             success: false,
-            error: error
+            error: error,
         }, { status: 500 });
     };
 };

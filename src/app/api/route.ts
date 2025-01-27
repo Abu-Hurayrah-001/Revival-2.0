@@ -5,6 +5,6 @@ import { NextResponse } from "next/server";
 export async function GET() {
     return NextResponse.json({
         success: true,
-        message: "One simply does not hit this route accidently."
+        message: "One simply does not hit this route accidently.",
     }, { status: 200 });
 };

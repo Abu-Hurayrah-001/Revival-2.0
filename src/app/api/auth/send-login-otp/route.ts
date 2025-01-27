@@ -59,7 +59,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     } catch (error) {
         return NextResponse.json({
             success: false,
-            error: error
+            error: error,
         }, { status: 500 });
     };
 };
