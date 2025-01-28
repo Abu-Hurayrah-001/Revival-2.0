@@ -8,13 +8,14 @@ import LoginOTPEmail from "@/emails/LoginOTPEmail";
 import { Resend } from "resend";
 
 // SEND OTP TO PHONE NUMBER
+type SendLoginOTPData = { email: string };
 connectPrimaryDb();
 const sendLoginOTPSchema = z.object({ email: z.string().email() });
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
     try {
-        const reqBody: { email: string } = await request.json();
+        const reqBody: SendLoginOTPData = await request.json();
         const parsedData = sendLoginOTPSchema.safeParse(reqBody);
 
         if (!parsedData.success) {

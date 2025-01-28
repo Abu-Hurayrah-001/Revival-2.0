@@ -3,13 +3,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { connectPrimaryDb } from "@/libs/connectPrimaryDb.lib";
 import User, { IUser } from "@/models/user/uer.model";
+import jwt from "jsonwebtoken";
 
 // SIGN UP
-type signInData = {
+type SignInData = {
     email: string;
     OTP: number;
 };
 
+type TokenData = { id: string };
 connectPrimaryDb();
 
 const signInSchema = z.object({
@@ -23,7 +25,7 @@ const signInSchema = z.object({
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
     try {
-        const reqBody: signInData = await request.json();
+        const reqBody: SignInData = await request.json();
         const parsedData = signInSchema.safeParse(reqBody);
         const currentTime = new Date();
 
@@ -57,17 +59,30 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             if (remainingTime <= 0) {
                 return NextResponse.json({
                     success: false,
-                    error: "Too slow dude, request a new OTP please."
+                    error: "Oopsies! OTP has expired.",
                 });
             } else {
-                // TODO: Decrease OTP expiry time by 45 seconds
+                user.OTPexpiry = new Date(); // This will ensure that the user can't enter the same OTP to login again
+                await user.save();
             };
         };
 
-        return NextResponse.json({
+        const tokenData: TokenData = { id: user.id };
+        const signInToken = jwt.sign(tokenData, process.env.LOGIN_TOKEN_SECRET!, { expiresIn: "1d" });
+
+        const response = NextResponse.json({
             success: true,
             message: "Logged in successfully, dear.",
         }, { status: 200 });
+
+        response.cookies.set("signInToken", signInToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 60 * 60 * 24,
+        });
+
+        return response;
     } catch (error) {
         return NextResponse.json({
             success: false,
