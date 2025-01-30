@@ -5,7 +5,7 @@ import { connectPrimaryDb } from "@/libs/connectPrimaryDb.lib";
 import User, { IUser } from "@/models/user/uer.model";
 import jwt from "jsonwebtoken";
 
-// SIGN UP
+// SIGN IN
 type SignInData = {
     email: string;
     OTP: number;
@@ -55,7 +55,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
         if (user.OTPexpiry) {
             const remainingTime = (user.OTPexpiry.valueOf() - currentTime.valueOf()) / 1000;
-            
             if (remainingTime <= 0) {
                 return NextResponse.json({
                     success: false,
@@ -84,9 +83,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
         return response;
     } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : "Oopsies! An unknown error has occured.";
         return NextResponse.json({
             success: false,
-            error: error,
+            error: errorMessage,
         }, { status: 500 });
     };
 };

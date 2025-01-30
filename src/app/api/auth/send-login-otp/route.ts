@@ -58,9 +58,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             message: "OTP sent to your email, dear.",
         }, { status: 201 });
     } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : "Oopsies! An unknown error has occured.";
         return NextResponse.json({
             success: false,
-            error: error,
+            error: errorMessage,
         }, { status: 500 });
     };
 };
