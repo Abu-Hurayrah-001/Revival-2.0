@@ -2,7 +2,7 @@
 import { NextResponse } from "next/server";
 
 // LOGOUT
-export async function GET() {
+export async function GET(): Promise<NextResponse> {
     try {
         const response = NextResponse.json({
             success: true,
