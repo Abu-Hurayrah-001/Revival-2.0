@@ -11,7 +11,7 @@ type SignInData = {
     OTP: number;
 };
 
-type TokenData = { id: string };
+export type TokenData = { id: string };
 connectPrimaryDb();
 
 const signInSchema = z.object({
