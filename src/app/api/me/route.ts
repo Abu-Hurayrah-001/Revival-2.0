@@ -1,15 +1,15 @@
 // IMPORTS
 import { NextRequest, NextResponse } from "next/server";
 import { getTokenData } from "@/libs/getTokenData";
-import User from "@/models/user/uer.model";
+import User, { IUser } from "@/models/user/uer.model";
 import { connectPrimaryDb } from "@/libs/connectPrimaryDb.lib";
 
-// GET USER DATA
+// GET USER DATA (Get user Id from signInToken > Send user data)
 connectPrimaryDb();
 export async function GET(request: NextRequest): Promise<NextResponse> {
     try {
         const userId = getTokenData(request);
-        const user = await User.findOne({ _id: userId }).select("-OTP -OTPexpiry");
+        const user: IUser | null = await User.findOne({ _id: userId }).select("-OTP -OTPexpiry");
 
         if (!user) {
             return NextResponse.json({

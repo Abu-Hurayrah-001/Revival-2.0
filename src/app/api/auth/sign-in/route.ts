@@ -5,7 +5,7 @@ import { connectPrimaryDb } from "@/libs/connectPrimaryDb.lib";
 import User, { IUser } from "@/models/user/uer.model";
 import jwt from "jsonwebtoken";
 
-// SIGN IN
+// SIGN IN (Get sign-in data from request > Validate it > Get user from email > Verify OTP and OTPexpiry > Set signInToken in cookies)
 type SignInData = {
     email: string;
     OTP: number;

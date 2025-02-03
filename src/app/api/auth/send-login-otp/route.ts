@@ -7,7 +7,7 @@ import { z } from "zod";
 import LoginOTPEmail from "@/emails/LoginOTPEmail";
 import { Resend } from "resend";
 
-// SEND OTP TO PHONE NUMBER
+// SEND OTP TO PHONE NUMBER (Get email from request > Validate it > Find user from email > Save OTP and OTPexpiry in user's db > Mail OTP)
 type SendLoginOTPData = { email: string };
 connectPrimaryDb();
 const sendLoginOTPSchema = z.object({ email: z.string().email() });

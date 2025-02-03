@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
 import { TokenData } from "@/app/api/auth/sign-in/route";
 
-// GET TOKEN DATA
+// GET TOKEN DATA (Get the signInToken from cookies > Decode it > Return it)
 export function getTokenData(request: NextRequest) {
     const signInToken = request.cookies.get("signInToken")?.value || "";
     const decodedToken = jwt.verify(signInToken, process.env.LOGIN_TOKEN_SECRET!) as TokenData;

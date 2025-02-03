@@ -1,7 +1,7 @@
 // IMPORTS
 import { NextResponse } from "next/server";
 
-// LOGOUT
+// LOGOUT (Replace signInToken's value with "")
 export async function GET(): Promise<NextResponse> {
     try {
         const response = NextResponse.json({
