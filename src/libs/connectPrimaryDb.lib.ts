@@ -19,7 +19,6 @@ export async function connectPrimaryDb(): Promise<void> {
             return;
         } catch (error) {
             console.log("Database connection failed. Gonnar cry?", error);
-            process.exit(1);
         };
     }
 };

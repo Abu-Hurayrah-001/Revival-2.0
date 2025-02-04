@@ -1,11 +1,12 @@
-// IMPORTS
+// IMPORTS.
 import mongoose, { Schema, Document } from "mongoose";
 
-// INTERFACES
+// INTERFACES.
 export interface IUser extends Document {
     email: string;
     OTP?: number;
     OTPexpiry?: Date;
+    isAdmin?: boolean;
 }
 
 // SCHEMAS
@@ -22,7 +23,12 @@ const userSchema = new Schema<IUser>({
         type: Date,
         required: false,
     },
+    isAdmin: {
+        type: Boolean,
+        default: false,
+        required: false,
+    },
 }, {timestamps: true});
 
-const User = mongoose.models.users || mongoose.model("users", userSchema);
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 export default User;

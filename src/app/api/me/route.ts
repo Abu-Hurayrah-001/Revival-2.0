@@ -1,10 +1,10 @@
-// IMPORTS
+// IMPORTS.
 import { NextRequest, NextResponse } from "next/server";
 import { getTokenData } from "@/libs/getTokenData";
 import User, { IUser } from "@/models/user/uer.model";
 import { connectPrimaryDb } from "@/libs/connectPrimaryDb.lib";
 
-// GET USER DATA (Get user Id from signInToken > Send user data)
+// GET USER DATA (Get user Id from signInToken > Send user data).
 connectPrimaryDb();
 export async function GET(request: NextRequest): Promise<NextResponse> {
     try {
