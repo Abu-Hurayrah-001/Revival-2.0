@@ -2,9 +2,11 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getTokenData } from "./libs/getTokenData";
+import { connectPrimaryDb } from "./libs/connectPrimaryDb";
 
 // MIDDLEWARE (Redirect logged in users away from publicOnlyPaths to "/me" > Allow only signed-in users in protected routes > Add routes in matcher).
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
+    await connectPrimaryDb();
     const path = request.nextUrl.pathname;
     let userId = null;
     const isNonLoggedInUsersPath = path ==="/login";

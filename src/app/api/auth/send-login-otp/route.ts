@@ -1,6 +1,6 @@
 // IMPORTS
 import { NextRequest, NextResponse } from "next/server";
-import { connectPrimaryDb } from "@/libs/connectPrimaryDb.lib";
+import { connectPrimaryDb } from "@/libs/connectPrimaryDb";
 import User, { IUser } from "@/models/user/uer.model";
 import { generateOTP } from "@/libs/generateOTP";
 import { z } from "zod";
@@ -9,11 +9,11 @@ import { Resend } from "resend";
 
 // SEND OTP TO PHONE NUMBER (Get email from request > Validate it > Find user from email > Save OTP and OTPexpiry in user's db > Mail OTP)
 type SendLoginOTPData = { email: string };
-connectPrimaryDb();
 const sendLoginOTPSchema = z.object({ email: z.string().email() });
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+    await connectPrimaryDb();
     try {
         const reqBody: SendLoginOTPData = await request.json();
         const parsedData = sendLoginOTPSchema.safeParse(reqBody);

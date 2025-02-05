@@ -1,7 +1,7 @@
 // IMPORTS
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { connectPrimaryDb } from "@/libs/connectPrimaryDb.lib";
+import { connectPrimaryDb } from "@/libs/connectPrimaryDb";
 import User, { IUser } from "@/models/user/uer.model";
 import jwt from "jsonwebtoken";
 
@@ -12,7 +12,6 @@ type SignInData = {
 };
 
 export type TokenData = { id: string };
-connectPrimaryDb();
 
 const signInSchema = z.object({
     email: z.string().email(),
@@ -24,6 +23,7 @@ const signInSchema = z.object({
 });
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+    await connectPrimaryDb();
     try {
         const reqBody: SignInData = await request.json();
         const parsedData = signInSchema.safeParse(reqBody);
