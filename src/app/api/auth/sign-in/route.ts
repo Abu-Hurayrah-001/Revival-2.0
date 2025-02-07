@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { connectPrimaryDb } from "@/libs/connectPrimaryDb";
 import User, { IUser } from "@/models/user/uer.model";
-import jwt from "jsonwebtoken";
+import { generateToken } from "@/libs/generateToken";
 
 // SIGN IN (Get sign-in data from request > Validate it > Get user from email > Verify OTP and OTPexpiry > Set signInToken in cookies)
 type SignInData = {
@@ -11,7 +11,10 @@ type SignInData = {
     OTP: number;
 };
 
-export type TokenData = { id: string };
+export type SignInTokenData = { 
+    id: string;
+    isAdmin?: boolean;
+};
 
 const signInSchema = z.object({
     email: z.string().email(),
@@ -66,8 +69,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             };
         };
 
-        const tokenData: TokenData = { id: user.id };
-        const signInToken = jwt.sign(tokenData, process.env.LOGIN_TOKEN_SECRET!, { expiresIn: "1d" });
+        const tokenData: SignInTokenData = { 
+            id: user.id,
+            isAdmin: user.isAdmin,
+        };
+        const signInToken = await generateToken(tokenData);
 
         const response = NextResponse.json({
             success: true,

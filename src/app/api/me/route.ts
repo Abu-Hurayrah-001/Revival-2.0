@@ -1,6 +1,6 @@
 // IMPORTS.
 import { NextRequest, NextResponse } from "next/server";
-import { getTokenData } from "@/libs/getTokenData";
+import { getSignInTokenData } from "@/libs/getSignInTokenData";
 import User, { IUser } from "@/models/user/uer.model";
 import { connectPrimaryDb } from "@/libs/connectPrimaryDb";
 
@@ -8,8 +8,8 @@ import { connectPrimaryDb } from "@/libs/connectPrimaryDb";
 export async function GET(request: NextRequest): Promise<NextResponse> {
     await connectPrimaryDb();
     try {
-        const userId = getTokenData(request);
-        const user: IUser | null = await User.findOne({ _id: userId }).select("-OTP -OTPexpiry");
+        const signInTokenData = await getSignInTokenData(request);
+        const user: IUser | null = await User.findOne({ _id: signInTokenData.id }).select("-OTP -OTPexpiry");
 
         if (!user) {
             return NextResponse.json({

@@ -1,26 +1,25 @@
 // IMPORTS.
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getTokenData } from "./libs/getTokenData";
-import { connectPrimaryDb } from "./libs/connectPrimaryDb";
+import { getSignInTokenData } from "./libs/getSignInTokenData";
+import { SignInTokenData } from "./app/api/auth/sign-in/route";
 
-// MIDDLEWARE (Redirect logged in users away from publicOnlyPaths to "/me" > Allow only signed-in users in protected routes > Add routes in matcher).
+// MIDDLEWARE (Extract "userId" from "signInToken" if it exists > Redirect logged in users away from publicOnlyPaths to "/me" > Allow only signed-in users in protected routes > Add routes in matcher).
 export async function middleware(request: NextRequest) {
-    await connectPrimaryDb();
     const path = request.nextUrl.pathname;
-    let userId = null;
-    const isNonLoggedInUsersPath = path ==="/login";
+    let signInTokenData: SignInTokenData | null = null;
+    const ispublicPath = path ==="/login"; // Future me, please don't use "/" here.
     const isApiRoute = path.startsWith("/api/");
 
     if (request.cookies.get("signInToken")?.value) {
-        userId = getTokenData(request);
+        signInTokenData = getSignInTokenData(request);
     };
 
-    if (isNonLoggedInUsersPath && userId) { // Logged in users trying to access "login" page.
+    if (ispublicPath && signInTokenData?.id) { // Logged in users trying to access "login" page.
         return NextResponse.redirect(new URL("/me", request.nextUrl));
     };
 
-    if (!isNonLoggedInUsersPath && !userId) { // Non-logged in users trying to access login protected page.
+    if (!ispublicPath && !signInTokenData?.id) { // Non-logged in users trying to access login protected page.
         if (isApiRoute) {
             return NextResponse.json({
                 success: false,
