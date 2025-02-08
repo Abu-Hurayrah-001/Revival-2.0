@@ -1,8 +1,9 @@
 // IMPORTS
 import { NextResponse } from "next/server";
 
-// LOGOUT (Replace signInToken's value with "")
+// LOGOUT
 export async function GET(): Promise<NextResponse> {
+    // Replace sign-in token's existing value with "".
     try {
         const response = NextResponse.json({
             success: true,

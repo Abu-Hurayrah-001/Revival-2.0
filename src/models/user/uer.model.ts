@@ -1,7 +1,7 @@
 // IMPORTS.
 import mongoose, { Schema, Document } from "mongoose";
 
-// INTERFACES.
+// USER MODEL.
 export interface IUser extends Document {
     email: string;
     OTP?: number;
@@ -9,7 +9,6 @@ export interface IUser extends Document {
     isAdmin?: boolean;
 }
 
-// SCHEMAS
 const userSchema = new Schema<IUser>({
     email: {
         type: String,

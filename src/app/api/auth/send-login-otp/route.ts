@@ -1,4 +1,4 @@
-// IMPORTS
+// IMPORTS.
 import { NextRequest, NextResponse } from "next/server";
 import { connectPrimaryDb } from "@/libs/connectPrimaryDb";
 import User, { IUser } from "@/models/user/uer.model";
@@ -7,7 +7,7 @@ import { z } from "zod";
 import LoginOTPEmail from "@/emails/LoginOTPEmail";
 import { Resend } from "resend";
 
-// SEND OTP TO PHONE NUMBER (Get email from request > Validate it > Find user from email > Save OTP and OTPexpiry in user's db > Mail OTP)
+// SEND OTP TO PHONE NUMBER.
 type SendLoginOTPData = { email: string };
 const sendLoginOTPSchema = z.object({ email: z.string().email() });
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -15,6 +15,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function POST(request: NextRequest): Promise<NextResponse> {
     await connectPrimaryDb();
     try {
+        // Validate request data.
         const reqBody: SendLoginOTPData = await request.json();
         const parsedData = sendLoginOTPSchema.safeParse(reqBody);
 
@@ -25,6 +26,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             }, { status: 400 });
         };
 
+        // Find user.
         const { email } = reqBody;
         let user = await User.findOne({ email }) as IUser;
 
@@ -32,6 +34,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             user = await User.create({ email });
         };
 
+        // Update OTP and OTP expiry time in user's db.
         const OTP = generateOTP();
         const OTPexpiry = new Date();
         OTPexpiry.setSeconds(OTPexpiry.getSeconds() + 45);
@@ -39,6 +42,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         user.OTPexpiry = OTPexpiry;
         await user.save();
         
+        // Send OTP to user's email.
         const { error } = await resend.emails.send({
             from: "onboarding@resend.dev",
             to: email,
