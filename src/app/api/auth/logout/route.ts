@@ -17,6 +17,7 @@ export async function GET(): Promise<NextResponse> {
             maxAge: 0,
         });
 
+        // Sending response.
         return response;
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : "Oopsies! An unknown error has occured."

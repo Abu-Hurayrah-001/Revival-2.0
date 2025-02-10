@@ -85,6 +85,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             message: "Logged in successfully, dear.",
         }, { status: 200 });
 
+        // Sending response.
         response.cookies.set("signInToken", signInToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",

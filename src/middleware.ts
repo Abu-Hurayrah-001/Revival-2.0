@@ -16,17 +16,29 @@ export async function middleware(request: NextRequest) {
         signInTokenData = await getSignInTokenData(request);
     };
 
-    // Prevent Logged in users trying from accessing "login" page.
+    // Prevent logged in users trying from accessing "login" page.
     if (ispublicPath && signInTokenData?.id) {
         return NextResponse.redirect(new URL("/me", request.nextUrl));
     };
 
-    // Prevent Non-logged in users from trying to access login protected page.
+    // Prevent non-logged in users from trying to access login protected page.
     if (!ispublicPath && !signInTokenData?.id) {
         if (isApiRoute) {
             return NextResponse.json({
                 success: false,
                 message: "Thou shall not pass without logging in."
+            }, { status: 401 });
+        } else {
+            return NextResponse.redirect(new URL("/login", request.nextUrl));
+        };
+    };
+
+    // Prevent non-admins from accessing admin routes.
+    if (!ispublicPath && (!signInTokenData?.id || signInTokenData?.isAdmin)) {
+        if (isApiRoute) {
+            return NextResponse.json({
+                success: false,
+                message: "You are being discriminated against because you are not an admin."
             }, { status: 401 });
         } else {
             return NextResponse.redirect(new URL("/login", request.nextUrl));
@@ -42,6 +54,7 @@ export const config = {
         "/me",
         "/admin",
         "/api/me",
-        "/api/auth/logout",
+        // "/api/auth/:path*",
+        // "/api/admin/:path*" NOT WORKING . Also, does middleware continously run?
     ],
 };

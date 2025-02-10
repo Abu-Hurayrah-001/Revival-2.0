@@ -19,6 +19,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
             }, { status: 409 });
         };
 
+        // Sending response.
         return NextResponse.json({
             success: true,
             message: "You are found.",

@@ -57,6 +57,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             }, { status: 500 });
         };
 
+        // Sending response.
         return NextResponse.json({
             success: true,
             message: "OTP sent to your email, dear.",
