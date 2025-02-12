@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname;
     let signInTokenData: SignInTokenData | null = null;
     const ispublicPath = path ==="/login"; // Future me, please don't use "/" here.
-    const isApiRoute = path.startsWith("/api/");
+    const isApiRoute = path.startsWith("/api");
 
     // Get sign-in token if it exists
     if (request.cookies.get("signInToken")?.value) {
@@ -38,7 +38,7 @@ export async function middleware(request: NextRequest) {
         if (isApiRoute) {
             return NextResponse.json({
                 success: false,
-                message: "You are being discriminated against because you are not an admin."
+                message: "Go home dear, admins only route."
             }, { status: 401 });
         } else {
             return NextResponse.redirect(new URL("/login", request.nextUrl));
@@ -52,9 +52,7 @@ export const config = {
         "/",
         "/login",
         "/me",
-        "/admin",
-        "/api/me",
-        // "/api/auth/:path*",
-        // "/api/admin/:path*" NOT WORKING . Also, does middleware continously run?
+        "/admin/:path*",
+        "/api/:path*",
     ],
 };
