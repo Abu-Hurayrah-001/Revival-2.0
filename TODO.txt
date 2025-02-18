@@ -1,0 +1,26 @@
+ADD TO COURSE MODEL: 
+
+    Core Information
+        Slug: URL-friendly slug for SEO.
+        Description: A short summary as well as a longer, detailed description.
+        Thumbnail/Promo Video: URLs for the course image and/or a promotional video.
+    Instructor & Authorship
+        Instructor: Reference to the instructor’s user record (using an ObjectId).
+        Created/Updated Timestamps: To track when the course was created and last updated.
+    Pricing & Status
+        Price: The cost of the course (and a flag for free courses).
+        Discounts: Any discount information.
+        Status: Whether the course is in draft mode, published, or archived.
+    Curriculum Structure
+        Modules/Sections: An array that breaks the course into modules or sections.
+        Lessons: Each module can have lessons with details such as title, content, video URL, duration, and any supplemental resources.
+    Additional Metadata
+        Category/Tags: For easier discovery and filtering.
+        Level & Language: Indicate the difficulty level (Beginner, Intermediate, Advanced) and the language.
+        Requirements & Outcomes: What students need to know before taking the course and what they’ll learn.
+        SEO Metadata: Optional meta title, description, etc.
+    Engagement & Social Proof
+        Enrollment Count: The number of students enrolled.
+        Ratings & Reviews: Average rating, review count, and possibly a list of review references.
+
+SLUG : check how may duplicates and add duplicate no.s + 1 at the end of slug

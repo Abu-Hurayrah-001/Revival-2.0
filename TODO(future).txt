@@ -1,0 +1,1 @@
+Rating/Reviews: If teachers are rated by students, you might add fields for an average rating or a count of reviews.
