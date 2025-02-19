@@ -15,11 +15,19 @@ export interface ITeacher extends Document {
     socialLinks?: Array<ISocialLinks>; // Future me, please ensure that maximum no. of allowed social links is 3 via schema-level validator.
 };
 
+export interface IDemoVideo extends Document {
+    
+};
+
 export interface ICourse extends Document {
     name: string;
+    thumbnail: string;
+    language: string;
+    startsOn: Date;
+    expiresOn: Date;
+    forWhomShort: string; // This line and above will also be a part of course card.
     shortDescription: string;
     longDescription: string
-    thumbnail: string;
     promoVideo: string;
     teachers: Array<ITeacher>;
 };
